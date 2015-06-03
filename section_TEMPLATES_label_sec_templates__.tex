@@ -1,0 +1,503 @@
+\section{TEMPLATES}\label{sec:templates}
+\textit{Templates} de autômatos celulares são uma generalização de tabelas de transições que faz com que um templates seja capaz de representar famílias de autômatos celulares. Os templates foram criados por \citeonline{deOliveira2014} e implementada como um algoritmo na linguagem do software \textit{Wolfram Mathematica} \cite{woframMathematica10}, atualmente disponíveis na biblioteca \textit{open source CATemplates} \cite{CATemplates} no GitHub.
+
+%TODO: verificar a frase e cada item $i$ representa uma função $g_i(x_0,x_1,\dots,x_{k^{2r+1}-1})$
+Formalmente, um \textit{template} é uma $n$-upla formada por $k^{2r+1}$ itens, e cada item $i$ representa uma função $g_i(x_0,x_1,\dots,x_{k^{2r+1}-1})$. As variáveis $x_i$ podem assumir qualquer estado entre 0 e $k-1$, logo no caso binário $x_i$ pode assumir os valores 0 e 1. É possível limitar os valores possíveis de $x_i$ através da notação $x_i \in C$, onde $C$ é um conjunto representando os possíveis valores de $x_i$. Entretanto vale frisar que no caso binário não tem lógica implementar uma notação como $x_i \in {1}$ ou $x_i \in {0}$ pois os templates também aceitam constante, sendo essas notações equivalente à apenas as constante $1$ e $0$ respectivamente.
+
+Exemplificando, dado um template $T_1 = (1,1,1,1,1-x_1,x_2,x_1,0)$, ele representará todas as regras que tenham em sua primeira posição (sempre da direita pra esquerda) o estado 0, nas posições 5, 6, 7 e 8 o estado 1, nas posições 2 e 3 qualquer estado no intervalo $[0,k-1]$ e na posição 4 o estado complementar ao valor de $x_1$. Perceba que o tamanho da $n$-tupla é determinado pela função $k^{2r+1}$, logo no template $T_1$ os únicos valores inteiros possíveis para $k$ e $r$ são 2 e 1 respectivamente. Portanto $T_1$ representará um subespaço dos ACs elementares.
+
+Deste modo o template $T_1$ representam o conjunto de autômatos celulares elementares $\{(1,1,1,1,1,0,0,0),(1,1,1,1,0,0,1,0),(1,1,1,1,1,1,0,0),(1,1,1,1,0,1,1,0)\}$, ou em sua forma decimal $\{248,242,252,246\}$.
+
+Cada template tem um número de substituições máximo igual a $k^m$, sendo o $m$ o número de variáveis livres. O maior template possível de uma família de ACs é o \textit{template base}, em que todas as variáveis são livres. O menor é o \textit{template constante}, em que não há variáveis livres, logo representa apenas uma regra. As $8$-uplas representada pela Equação \ref{eq:templateConstante} representa um template constante que pode ser associado apenas a regra 30. 
+\begin{equation}
+(0,0,0,1,1,1,1,0)
+\label{eq:templateConstante}
+\end{equation}
+
+Já a $8$-uplas representada pela Equação \ref{eq:templateBase} representa um template base que está associado a todas as 256 regras do espaço elementar, já que para $m = 8$ temos $2^m = 256 $.
+\begin{equation}
+(x_7,x_6,x_5,x_4,x_3,x_2,x_1,x_0)
+\label{eq:templateBase}
+\end{equation}
+
+É importante enfatizar que nem sempre o número de substituições é igual a $k^m$. Isto ocorre pois algumas substituições podem originar tabelas de transições inválidas. O template $(1,1,1,1,1,x_0+x_1,x_1,x_0)$, por exemplo, não pode apresentar as substituições $x_0=1$ e $x_1=1$ ao mesmo tempo, pois isso faz com que $x_0 + x_1 \notin [0, k-1]$, invalidando assim essa substituição.
+
+
+
+
+A representação de famílias de autômatos celulares através de templates, possibilita a utilização de templates para problemas já bem conhecidos da área de ACs. Um exemplo de problema que pode se beneficiar dos templates é o problema da paridade.
+
+O problema da paridade refere-se à capacidade de um AC binário, unidimensional, com condição de contorno periódica, apresentar uma evolução temporal da seguinte forma: se uma configuração inicial contiver um número ímpar de células com o valor 1, o AC deve convergir para que todas as células estejam no estado 1; caso contrário, ele deve convergir para todas as células no estado 0. Pode-se dizer que as regras que solucionam o problema de paridade em ACs são \textit{perfeitas} se elas resolverem o problema em qualquer configuração inicial arbitrária, em reticulados de tamanho ímpar. 
+
+A Figura \ref{fig:parity-rule} ilustra o desenvolvimento espaço temporal de uma regra que usualmente resolve o problema de paridade. Nessa imagem o desenvolvimento temporal à esquerda contém em sua configuração inicial um número par de estados igual a 1, já na evolução temporal ilustrada à direita há um número ímpar de estados igual a 1.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=.7\textwidth]{regra1}
+    \caption{Desenvolvimento espaço temporal de um AC que usualmente resolve o problema de paridade.}
+%	 \captionfont{Fonte: elaborado pelos autores.}
+    \label{fig:parity-rule}
+\end{figure}
+
+
+O estudo do problema de paridade é interessante pois ajuda a compreender outro problemas ainda sem solução em ACs, que é que a despeito da habilidade de realizar computações, pouco se sabe sobre como se deve projetar transições de estado locais que levem a um comportamento global pré determinado. Entretanto, entender o impacto das interações locais nas soluções globais influi em diversos sistemas de computação emergente. Entender a influência que o tamanho da vizinhança dos autômatos celulares apresenta na computabilidade pode apresentar consequências úteis para o projeto de ACs e para a compreensão de sistemas emergentes complexos em geral.
+
+Estudos feitos sobre o problema de paridade já levaram ao conhecimento de que o problema não tem solução perfeitas para ACs elementares e de raio 2, todavia já foi descoberta uma regra perfeita que soluciona o problema de paridade para raio 4. Em relação aos ACs de raio 3, ainda não foi encontradas solução perfeita e há evidências empíricas desfavoráveis a uma solução para esse raio \cite{Betel2013}.
+
+Esse estudos de \citeonline{Betel2013}, buscando definir se o problema de paridade em ACs de raio 2 apresenta alguma soluções perfeita, encontraram de forma analítica como as transações de estado de supostas regras que resolvessem o problema de paridade deveriam ser. Com isso, utilizando grafos de \textit{De Bruijn} foram definidas quais variáveis deveriam ser estáticas, quais deveriam ser livres e quais deveriam apresentar interdependência. Com essa definições foram definidas duas famílias de ACs. Os grafos ilustrados na Figura \ref{fig:grafosDeBruijn} e na Figura \ref{fig:grafosDeBruijn2} são os grafos desenvolvidos por \citeonline{Betel2013}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=.8\textwidth]{grafo1.pdf}
+    \caption{Grafo de De Bruijn representando regras que possivelmente solucionem o problema de paridade.}
+%	 \captionfont{Fonte: elaborado pelos autores.}
+    \label{fig:grafosDeBruijn}
+\end{figure}
+
+Ambos os grafos apresentam as variáveis livres $a, b, c, d \text{ e } x$ e uma interdependência, em que uma transição de estado deve ter o valor oposto à variável $x$. A única diferença entre os dois grafos são nas váriaveis estáticas.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.8\textwidth]{grafo2.pdf}
+    \caption{Outro grafo de De Bruijn representando regras que possivelmente solucionem o problema de paridade.}
+%	 \captionfont{Fonte: elaborado pelos autores.}
+    \label{fig:grafosDeBruijn2}
+\end{figure}
+
+Ao utilizar os grafos de \textit{De Bruijn} fixando algumas transições de estado, a família de ACs em que se procurava as regras que solucionavam o problema de paridade, antes composta por $2^{32}$ regras, foi restringida para apenas 64 regras, que puderam ser estudadas em mais detalhes até que se falhassem. Entretanto, conforme mostrado em \cite{daCosta2014}, a representação desse espaço de 64 regras poderiam ser perfeitamente representados através de \textit{templates}. O template \ref{eq:templateParidade1} representa o mesmo espaço que a Figura \ref{fig:grafosDeBruijn}, já o template \ref{eq:templateParidade2} é equivale a Figura \ref{fig:grafosDeBruijn2}.
+
+\begin{equation}
+\left(0,1,1,1,1,x_{26},0,1,1,1,1-x_{10},x_{20,}0,0,1,0,1,0,1,0,x_{11},x_{10},0,0,1,0,x_5,0,1,0,0,1\right)
+\label{eq:templateParidade1}
+\end{equation}
+
+\begin{equation}
+\left(0,1,1,0,1,x_{26},1,0,1,1,1-x_{10},x_{20,}0,1,1,0,1,0,1,1,x_{11},x_{10},0,0,1,0,x_5,0,0,0,0,1\right)
+\label{eq:templateParidade2}
+\end{equation}
+
+
+\newpage\newpage
+\subsection{Expansão De Templates}
+	Expansão é o processo no qual se obtêm todas as tabelas de transição $R_k$ associadas a um template $T$.
+	A operação de expansão foi apresentada por \cite{daCosta2014} e foi descrita em maior detalhes da seguinte maneira:
+
+	\begin{equation}
+	E(T)=R_k
+	\end{equation}
+
+	A operação de expansão pode ser dividida em dois passo, em que o primeiro consiste em efetuar todas as $i$ substituições de variáveis, sendo que $i$ pertence ao intervalo discreto $[0,k^m-1]$. Considere como exemplo o template $T_1 = (1,1,1,1,1-x_1,x_2,x_1,0)$, o primeiro passo do processo de expansão consiste em encontrar as tabelas $k$-arias resultantes das combinações possíveis das substituições de $x_1$ e $x_2$, conforme pode ser melhor visualizado na Tabela \ref{tab:expansionProcess}.
+
+	\begin{table}[h!]
+	\centering
+	\caption{Processo de expansão}
+	{
+		\vspace{0.3cm}
+		\begin{tabular}{cccc}
+		\hline
+		$i$ & $x_2$ & $x_1$ & tabela $k$-aria resultante \\
+		\hline
+		0	&	0	&	0	&	(1,1,1,1,1,0,0,0)	\\
+		1	&	0	&	1	&	(1,1,1,1,1,1,0,0)	\\
+		2	&	1	&	0	&	(1,1,1,1,0,0,1,0)	\\
+		3	&	1	&	1	&	(1,1,1,1,0,1,1,0)	\\
+		\hline
+		\end{tabular}
+	}
+	\label{tab:expansionProcess}
+	\end{table}
+
+	O segundo passo da operação de expansão é eliminar as tabelas $k$-aria inválidas. No caso do template $T_1$ todas as tabelas resultantes eram válidas, mas nem sempre isso ocorre. No template $T_2 = (1,1,1,1,1,x_0+x_1,x_1,x_0)$, por exemplo, a substituição $x_0 = 1$ e $x_1 = 1$ resulta numa tabela $k$-aria inválida pois a terceira posição apresenta um estado com um valor fora do interval $[0,k-1]$, para $k=2$. A Tabela \ref{tab:invalideExpansion} evidência melhor essa substituição inválida.
+
+	\begin{table}[h!]
+	\centering
+	\caption{Processo de expansão}
+	{
+		\vspace{0.3cm}
+		\begin{tabular}{cccc}
+		\hline
+		$i$ & $x_1$ & $x_0$ & tabela $k$-aria resultante \\
+		\hline
+		0	&	0	&	0	&	(1,1,1,1,1,0,0,0)	\\
+		1	&	0	&	1	&	(1,1,1,1,1,1,0,1)	\\
+		2	&	1	&	0	&	(1,1,1,1,1,1,1,0)	\\
+		3	&	1	&	1	&	(1,1,1,1,1,2,1,1)	\\
+		\hline
+		\end{tabular}
+	}
+	\label{tab:invalideExpansion}
+	\end{table}
+
+	Ainda há outra maneira em que templates resultam em substituições inválidas, sendo uma delas através da utilização da notação restrição por conjuntos. Considere o templates $T_3 = (2,2,2,2,2,2,2,2,x_0\in \{0,1\})$ da família de $k=3$ e $r=0,5$. A substituição obtida para $i = 2$ seria inválida pois nesse caso $x_0 = 2$ e $2 \notin \{0,1\}$. A Tabela \ref{tab:invalideExpansion2} evidencia melhor esse processo.
+
+	\begin{table}[h!]
+	\centering
+	\caption{Processo de expansão}
+	{
+		\vspace{0.3cm}
+		\begin{tabular}{cccc}
+		\hline
+		$i$ & $x_0$ & tabela $k$-aria resultante \\
+		\hline
+		0	&	0	&	(2,2,2,2,2,2,2,2,0)	\\
+		1	&	1	&	(2,2,2,2,2,2,2,2,1)	\\
+		2	&	2	&	(2,2,2,2,2,2,2,2,2)	\\
+		\hline
+		\end{tabular}
+	}
+	\label{tab:invalideExpansion2}
+	\end{table}
+
+	A existência de regras inválidas são os responsáveis por templates que representem um conjunto de regras menores que $k^m$. Essa possibilidade é bastante útil para os templates de regras conservativas e regras confinadas.
+
+	O valor de $i$ sempre representa apenas uma substituição possível para as variáveis livres de um templates. Isso ocorre pois $i$ é a representação decimal da conversão $k$-aria das concatenações dos valores das variáveis livres em ordem decrescente. Exemplificando, considere o templates $T_3 = (2,2,2,2,2,2,2,x_1,x_0\in \{0,1\})$ para $k=3$. O valor de $i=5$ será convertido pelo processo de expansão obtendo-se assim o seu equivalente na base ternária $(1,2)$ e então cada um dos dígitos é atribuído a uma variável, resultando assim no conjunto de substituições ${x_0=2,x_1=1}$.
+
+	A forma com que o valor de $i$ representa apenas uma expansão permite possibilidade de se obter a $i$-ésima expansão de um template. Essa propriedade é relevante devido ao fato da expansão ser uma operação potencialmente custosa, e a possibilidade de ser realizar a $i$-ésima expansão de um template facilita e permite o paralelismo.
+
+\newpage\newpage
+\subsection{Intersecção De Templates}%TODO: Verificar essa frase que está meio confusa.
+	Intersecção é o processo no qual se obtêm um template que represente o conjunto $R_k$ de todas as regras pertencentes aos dois templates definidos para o mesmo espaço recebidos como parâmetro. A operação de intersecção foi descrita por \citeonline{daCosta2014} e mostrada em maiores detalhes da seguinte maneira:
+
+	\begin{equation}
+	I(T_1,T_2)=T_3 \Leftrightarrow E(T_3) = E(T_1) \cap E(T_2)
+	\end{equation}
+
+	%TODO: Verificar essa frase que está meio confusa.
+	A operação de intersecção, assim como a de expansão, também é efetuada em duas etapas. Na primeira etapa iguala-se os dois templates e assim obtêm-se um sistema de equações. Esse sistema de equações é então passado como argumento para a função Solve, função essa nativa da \textit{Wolfram Language} \cite{woframMathematica10}. A função Solve retorna então os relacionamentos entre as variáveis, que ao serem aplicados aos templates recebidos, retorna dois template equivalente, bastando escolher um que será o template de intersecção. No caso dos templates não apresentarem intersecção, a função Solve não retornará solução.
+
+	Para melhor compreensão, considere os templates $T_1 = (x_7,x_3,1-x_4,x_4,x_3,x_2,2,x_0)$ e $T_2 = (x_7,1,x_5,0,x_3,x_2,2,2)$, ambos com $r=0.5$ e $k=3$. Esse templates serão transformado em um sistema de equações como demonstrado na Equação \ref{eq:interseccao}.
+
+	\begin{equation}
+	\left\{\begin{matrix}
+	x_7   & = & x_7 \\ 
+	x_3   & = & 1 \\ 
+	1-x_4 & = & x_5    \\ 
+	x_4   & = & 0    \\ 
+	x_3   & = & x_3    \\ 
+	x_2   & = & x_2   \\ 
+	2     & = & 2   \\ 
+	x_0   & = & 2
+	\end{matrix}\right.
+	\label{eq:interseccao}
+	\end{equation}
+
+	Esse sistema de equações é passado então como argumento para a função Solve, que por sua vez retorna um conjunto solução $S$, que nesse exemplo é $S = \{x_0 = 2, x_3 = 1, x_4 = 0, x_5 = 1 - x_4, x_6 = 0\}$. O cojunto $S$ é aplicado como um conjunto de substituições sobre os dois templates recebidos como parâmetro, que em caso de templates sem restrição de variáveis sempre retorna o mesmo template. Neste exemplo, após aplicada as substituições do conjunto de soluções $S$ obtêm-se como resultado o templates $T_3 = (x_7, 1, 1, 0, 1, x_2, 2, 2)$.
+
+	A segunda etapa do algoritmo apenas é aplicada para templates com alguma restrição de variável. Essa etapa consiste em extrair as expressões que estabelecem as restrições, e através delas obter um segundo sistema de equações. A solução desse sistema ou pode ser vazia, expressando assim que os templates não tem intersecção, ou pode indicar os valores que as variáveis com restrição podem assumir.
+
+	Para exemplificar essa segunda etapa, considere os templates $T_{r1} = (x_7 \in \{0,1,2\},x_3,1-x_4,x_4,x_3,x_2 \in \{1,2\},2,x_0)$ e $T_{r2} = (x_7 \in \{0,1\},1,x_5,0,x_3,x_2 \in \{1\},2,2)$. A primeira etapa ocorre normalmente, entretanto, quando as substituições do conjunto $S$ forem aplicadas nos templates recebidos, não será mais obtido templates iguais. Nesse caso o conjunto de templates obtidos será $\{(x_7 \in \{0,1,2\}, 1, 1, 0, 1, x_2 \in \{1,2\}, 2, 2), (x_7 \in \{0,1\}, 1, 1, 0, 1, x_2 \in \{1\}, 2, 2)\}$. Na sequencia o algoritmos faz a extração das expressões de restrição de variáveis e obtêm o conjunto $\{x_7 \in \{0,1\}, x_2 \in \{1,2\}, x_2 \in \{1\} \}$. Esse conjunto é então convertido para o sistema de equações representadas pela Equação \ref{eq:interseccaoRestrita}.
+
+	\begin{equation}
+	\left\{\begin{matrix}
+	x_7	  = 0 	& \vee &	x_7	=	1 & \vee &	x_7	= 2	\\ 
+	x_7   = 0 	& \vee &	x_7	=	1					\\ 
+	x_2   = 1 	& \vee &	x_2	=	2					\\ 
+	x_2	  =	1											\\ 
+	\end{matrix}\right.
+	\label{eq:interseccaoRestrita}
+	\end{equation}
+
+	Esse sistema de equações é então passado como argumento para a função Solve, que retorna seu conjunto solução. Por fim o algoritmo usa o conjunto solução retornado para remover as restrições da variável $x_2$, transformando-a no valor $1$, e restringi a variável $x_7$ apenas ao conjunto $\{0,1\}$. O template de intersecção gerado por todo esse processo é representado pela Equação \ref{eq:templateIntescecao}.
+
+	\begin{equation}
+	T_{r3} = (x_7 \in \{0,1\}, x_3, 1-x_4, x_4, x_3, 1, 2, x_0)
+	\label{eq:templateIntescecao}
+	\end{equation}
+
+	Vale frisar que o template $T_{r2}$ também poderia ser representado substituindo a variável $x_2$ e seu conjunto de restrição $\{1\}$ apenas pelo valor constante $1$, como mostrado a seguir: $T_{r2} = (x_7 \in \{0,1\}, 1, x_5, 0, x_3, 1, 2, 2)$. Esse tipo de mudança é sempre preferível pois variáveis a mais acarretam em mais processamento.
+
+	No caso de binário, ou seja $k = 2$, a notação de restrição nunca se faz necessária visto que ou a restrição terá apenas um valor factível, sendo preferível que essa variável e sua restrição sejam substituídas por valor constante, ou a variável poderá assumir qualquer estado, sendo assim por definição uma variável livre.
+
+
+
+
+
+\section{REPRESENTAÇÃO DE PROPRIEDADES ESTÁTICAS POR MEIO DE TEMPLATES}\label{sec:propriedadesEstaticas}
+
+	Em ACs, propriedades estáticas são propriedades computadas com base nas tabelas de transição. Essas propriedade permitem prever determinados comportamentos de um ACs sem consultar sua evolução espaço temporal. 
+
+	Esta seção descreverá algumas propriedades estáticas, assim como o funcionamento dos algoritmos geradores de templates que as representam. Todos algortimos explicados aqui estão implementados na biblioteca \textit{CATemplates} \cite{CATemplates}.
+
+	\subsection{Conservabilidade De Estados E Conservabilidade De Paridade}
+	Conservabilidade de estados é uma propriedade estática que determina que a soma dos estados de um determinado autômato celular não devem se alterar durante a evolução espaço temporal, independente da configuração inicial passada.
+
+	De acordo com \cite{boccara2002}, para um AC ser conservativo cada uma de suas regras locais $f$ de vizinhança $(\alpha_0,\alpha_1, \dots, \alpha_{n-1})$ deve respeitar as condições descritas na Equação \ref{eq:conservativeCA}.
+
+	\begin{equation}
+	\begin{split}
+	f(\alpha_0,\alpha_1, \dots,\alpha_{n-1}) = \alpha_0 + (\sum_{i=0}^{n-2}f(0_0,0_1, \dots,0_i,\alpha_1,\alpha_2, \dots,\alpha_{n-1}) \\- f(0_0,0_1, \dots,0_i,\alpha_0,\alpha_1, \dots,\alpha_{n-i-1}))
+	\label{eq:conservativeCA}
+	\end{split}
+	\end{equation}
+
+	Para exemplificar, considere a regra 204 do espaço elementar. Por meio da condição mostrada na Equação \ref{eq:conservativeCA}, será provado que essa regra é conservativa, já que satisfaz a condição. A Equação \ref{eq:ruleTable204} representa a tabela de transição da regra 204.
+
+	\begin{equation}
+	\begin{split}
+	(((1,1,1),1),((1,1,0),1),((1,0,1),0),((1,0,0),0),\\((0,1,1),1),((0,1,0),1),((0,0,1),0),((0,0,0),0))
+	\label{eq:ruleTable204}
+	\end{split}
+	\end{equation}
+
+	Como demonstra \cite{daCosta2014}, a aplicação das condições descritas na Equação \ref{eq:conservativeCA} nas tabelas de transições de ACs do espaço elementar, sempre resultará no sistema descrito pela Equação \ref{eq:conservativeLinearSystem}, sendo que essa Equação simplificada pode ser representada pela Equação \ref{eq:conservativeLinearSystem2}.
+
+	\begin{equation}
+	\left\{\begin{matrix}
+	 f(0,0,0) = 0 + (f(0,0,0) - f(0,0,0)) + (f(0,0,0) - f(0,0,0))\\ 
+	 f(0,0,1) = 0 + (f(0,0,1) - f(0,0,0)) + (f(0,0,0) - f(0,0,0))\\ 
+	 f(0,1,0) = 0 + (f(0,1,0) - f(0,0,1)) + (f(0,0,1) - f(0,0,0))\\ 
+	 f(0,1,1) = 0 + (f(0,1,1) - f(0,0,1)) + (f(0,0,1) - f(0,0,0))\\ 
+	 f(1,0,0) = 1 + (f(0,0,0) - f(0,1,0)) + (f(0,0,0) - f(0,0,1))\\ 
+	 f(1,0,1) = 1 + (f(0,0,1) - f(0,1,0)) + (f(0,0,0) - f(0,0,1))\\ 
+	 f(1,1,0) = 1 + (f(0,1,0) - f(0,1,1)) + (f(0,0,1) - f(0,0,1))\\ 
+	 f(1,1,1) = 1 + (f(0,1,1) - f(0,1,1)) + (f(0,0,1) - f(0,0,1))
+	\end{matrix}\right.
+	\label{eq:conservativeLinearSystem}
+	\end{equation}
+
+	\begin{equation}
+	\left\{\begin{matrix}
+	 f(0,0,0) & = & 0 		& &\\ 
+	 f(0,0,1) & = & f(0,0,1)& & \\ 
+	 f(0,1,0) & = & f(0,1,0)& & \\ 
+	 f(0,1,1) & = & f(0,1,1)& & \\ 
+	 f(1,0,0) & = & 1 - f(0,0,1) - f(0,1,0) \\ 
+	 f(1,0,1) & = & 1 - f(0,1,0) \\ 
+	 f(1,1,0) & = & 1 + (f(0,1,0) - f(0,1,1))\\ 
+	 f(1,1,1) & = & 1 & &
+	\end{matrix}\right.
+	\label{eq:conservativeLinearSystem2}
+	\end{equation}
+
+	Excluindo-se as condições tautológicas do sistema e atribuindo os valores das funções $f$ conforme a tabela de transição da regra 204, é obtido o sistema descrito pela Equação \ref{eq:conservativeAC204}, que claramente respeita todas as condições do sistema, provando assim que a regra 204 é conservativa.
+
+	\begin{equation}
+	\left\{\begin{matrix}
+	 0 & = & 0 \\ 
+	 0 & = & 1 - 0 - 1 \\ 
+	 0 & = & 1 - 1 \\ 
+	 1 & = & 1 + (1 - 1)\\ 
+	 1 & = & 1 
+	\end{matrix}\right.
+	\label{eq:conservativeAC204}
+	\end{equation}
+
+	A implementação desse algoritmo, apresentada em \cite{deOliveira2014}, funciona na seguinte sequência de passos: o algoritmo recebe as variáveis $k$ e $r$ definindo assim a família das regras que serão geradas, depois são criadas todas as vizinhanças do espaço, excluídas as vizinhanças geram tautologias e então aplicadas as condições de \citeonline{boccara2002}. Basicamente, vizinhanças que geram regras tautológicas, de acordo com \cite{Schranko2010}, são as que começam com 0 mas não sejam compostas apenas por 0.
+
+	Exemplificando, considere um espaço com $k=2$ e $r=1$. Primeiramente o algoritmo obterá o conjunto das vizinhanças que não geram regras tautológicas, portanto será obtido o conjunto $\{(1,1,1),(1,1,0),(1,0,1),(1,0,0),(0,0,0)\}$. Então é criado o sistema de equações \ref{eq:conservativeLinearSystem3}, baseado nas condições de \citeonline{boccara2002}.
+
+	\begin{equation}
+	\left\{\begin{matrix}
+	 x_0 & = & 0\\ 
+	 x_4 & = & 1 +2x_0 -x_1 -x_2\\ 
+	 x_5 & = & 1 +x_0 -x_2\\
+	 x_6 & = & 1 +x_2 -x_3\\ 
+	 x_7 & = & 1
+	\end{matrix}\right.
+	\label{eq:conservativeLinearSystem3}
+	\end{equation}
+
+	Por fim o algoritmo utiliza a função Solve do \textit{Wofram Mathematica} para simplificar o sistema, e utiliza o conjunto solução retornado pela função Solve como regras de substituições, e as aplica no template base, gerando assim o template das regras conservativas. O template gerado pode ser observado na Equação \ref{eq:conservativeTemplate}, e sua expansão nos gera as cinco regras conservativas do espaço elementar após eliminadas as regras inválidas.
+
+	\begin{equation}
+	(1,x_2-x_3+1,1-x_2,-x_1-x_2+1,x_3,x_2,x_1,0)
+	\label{eq:conservativeTemplate}
+	\end{equation}
+
+	O processo de gerar regras conservativas de paridade é bem parecido, porém as condições de \citeonline{boccara2002} são ligeiramente modificadas em relação a Equação \ref{eq:conservativeCA}, de forma que cada uma das funções locais deve respeitar agora as condições da Equação \ref{eq:parityConservativeCA}.
+
+	\begin{equation}
+	\begin{split}
+	f(\alpha_0,\alpha_1, \dots,\alpha_{n-1}) \equiv \alpha_0 + (\sum_{i=0}^{n-2}f(0_0,0_1, \dots,0_i,\alpha_1,\alpha_2, \dots,\alpha_{n-1}) \\- f(0_0,0_1, \dots,0_i,\alpha_0,\alpha_1, \dots,\alpha_{n-i-1})) \; (mod 2)  
+	\label{eq:parityConservativeCA}
+	\end{split}
+	\end{equation}
+
+	A biblioteca \textit{CATemplates} já tem implementado o algoritmo gerador de templates de regras conservativas de paridade, e conforme será mostrado posteriormente, esse algoritmo pode ser de suma importância na busca de uma solução do para o problema de paridade.
+
+
+
+
+
+	\subsection{Confinamento}
+	Autômatos celulares confinados, ou \textit{captive} em Inglês, são uma classe de AC, que se baseia em uma caracterização de sua funções locais sem dotar o estado definido com qualquer estrutura externa à vizinhança \cite{theyssier2004captive}. 
+
+	Essa propriedade estática foi proposta por \citeonline{theyssier2004captive}, que formalmente define que dado a função local $f$ de um AC para a vizinhança $(\alpha_0, \dots, \alpha_{2r})$, sendo o $r$ o raio, um AC é considerado confinado se respeitar a condição descrita na Equação \ref{eq:captiveAC}.
+
+	\begin{equation}
+	f((\alpha_0, \dots, \alpha_{2r})) = \beta, \beta \in \{\alpha_0, \dots, \alpha_{2r}\}
+	\label{eq:captiveAC}
+	\end{equation}
+
+	Essa propriedade pode ser facilmente representada através de templates, bastando restringir as variáveis à um conjunto de valores presentes na vizinhança correspondente. Já há um algoritmo que gera as regras confinadas implementado no biblioteca \textit{open source CATemplates}. Esse algoritmo tem um funcionamento simples: ele recebe como parâmetro os argumentos $k$ e $r$. Gera então as vizinhanças do espaço e verifica em cada uma das vizinhanças os estados que elas tem. Então, caso a vizinhança tenha todos os estados do intervalo $[0, k-1]$, no template essa posição terá uma variável livre. Caso a vizinhança tenha apenas um estado, a posição correspondente no template assume um valor fixo. Por fim, caso a vizinhança apresente mais de um estado, mas não todos, a posição correspondente do template apresentará uma variável restritas mediante expressões $x_i \in C$.
+
+	No caso binário é trivial perceber que qualquer AC binário que tenha as funções locais $f((0_0, 0_1,\dots, 0_{2r})) = 0$ e $f((1_0, 1_,1\dots, 1_{2r})) = 1$ é caracterizado como um AC confinado. A Equação \ref{eq:captiveTemplateACE} representa o template de todas as regras confinadas do espaço elementar. Já as equações \ref{eq:captiveTemplateR05} representam a família de $k=2$ e $r=0,5$.
+
+	\begin{equation}
+	(1,x_6,x_5,x_4,x_3,x_2,x_1,0)
+	\label{eq:captiveTemplateACE}
+	\end{equation}
+
+	\begin{equation}
+	(1,x_2,x_1,0)
+	\label{eq:captiveTemplateR05}
+	\end{equation}
+
+	Já a Equação \ref{eq:captiveTemplateK3} representa a família dos autômatos celulares confinados de $r=1$ e três estados.
+
+	\begin{equation}
+	\begin{split}
+	(2, x_{25} \in \{1,2\}, x_{24} \in \{0,2\}, x_{23} \in \{1,2\}, x_{22} \in \{1,2\}, x_{21}, x_{20} \in \{0,2\}, x_{19}, x_{18} \in \{0,2\}, \\
+	x_{17} \in \{1,2\}, x_{16} \in \{1,2\}, x_{15}, x_{14} \in \{1,2\},1, x_{12} \in \{0,1\}, x_{11}, x_{10} \in \{0,1\}, x_9 \in \{0,1\}, \\
+	x_8 \in \{0,2\}, x_7, x_6 \in \{0,2\}, x_5, x_4 \in \{0,1\}, x_3 \in \{0,1\}, x_2 \in \{0,2\}, x_1 \in \{0,1\}, 0)
+	\label{eq:captiveTemplateK3}
+	\end{split}
+	\end{equation}
+
+
+
+
+
+
+
+
+
+\section{RESULTADOS PARCIAIS}\label{sec:aplicacao}
+
+	O presente estudo já apresenta resultados interessantes, tais como a desenvolvimento da operação de complemento, assim como a demosntração de um série de passos que, utilizando a operação de complemento, consegue restringir o espaço busca de ACs de raio 3 que tem a possibilidade de solucionar o problema de paridade.
+
+	A operação de complemento é responsável por obter um conjunto de templates que represente todas as regras que não pertençam a um template passado como argumento. Está operação pode ser melhor visualizada abaixo:
+	\begin{equation}
+	C(T_1)=\bar{T_1}
+	\end{equation}
+
+	A Figura \ref{fig:complement} ilustra essa operação, que consiste em passar um templates $T_1$ para a função, e receber um conjunto de templates complementares a $T_1$, aqui representados como $\bar{T_1}$.
+
+	\begin{figure}[h!]
+	  \centering
+	  \includegraphics[width=.3\textwidth]{fig_complement}
+	  \caption{Em branco, $T_1$ representa uma família de ACs. Em azul, $\bar{T_1}$ representa o complemento dessa família.}
+%	 \captionfont{Fonte: elaborado pelos autores.}
+	  \label{fig:complement}
+	\end{figure}
+
+	O processo que o algoritmo usa para encontrar o conjunto complementar de um template é efetuado através de uma sequência de etapas. A primeira etapa consiste em igualar o template recebido com o template base do mesmo espaço. Com esse processo obtêm-se uma combinações lógicas de equações, remove-se então todas as equações tautológicas, aplica-se a operação de conjugação nas equações, e troca-se o operador lógico $\wedge$ por $\vee$. Por fim esse sistema é então passado como argumento para a função Solve. O resultado da função Solve é um conjuntos com diversos conjuntos de substituições que são aplicados ao template base.
+
+	Para melhor visualizar essa primeira etapa, considere o template $T_1 = (x_7, x_6, x_5, 1 - x_1, x_3, x_2, x_1, 0)$ de $k=2$ e $r=1$. Esse template será igualado com o template base gerando o sistema de equações \ref{eq:complement}, representado abaixo:
+	
+	\begin{equation}
+	\left\{\begin{matrix}
+	x_7 & = & x_7	\\ 
+	x_6 & = & x_6	\\ 
+	x_5 & = & x_5	\\ 
+	x_4 & = & 1 - x_1 \\ 
+	x_3 & = & x_3	\\ 
+	x_2 & = & x_2	\\ 
+	x_1 & = & x_1	\\ 
+	x_0 & = & 0
+	\end{matrix}\right.
+	\label{eq:complement}
+	\end{equation}
+
+	Esse sistema deve ser representado através de combinações lógicas de equações. A Equação \ref{eq:logicalComplement} é equivalente a Equação \ref{eq:complement} e também pode ser resolvido pela função Solve do \textit{Wolfram Language}.
+
+	\begin{equation}
+	x_7 = x_7	\wedge  
+	x_6 = x_6	\wedge  
+	x_5 = x_5	\wedge  
+	x_4 = 1 - x_1 \wedge  
+	x_3 = x_3	\wedge  
+	x_2 = x_2	\wedge  
+	x_1 = x_1	\wedge  
+	x_0 = 0
+	\label{eq:logicalComplement}
+	\end{equation}
+
+	Antes de passar a Equação \ref{eq:logicalComplement} para a função Solve, o algoritmo elimina todas as equações tautológicas e troca todo operadores lógico $\wedge$ por $\vee$. Por fim é aplicado a operação de conjugação, que no caso binário é efetuar a permutação $\rho = (0 \rightarrow 1, 1 \rightarrow 0)$. Essa permutação também pode ser feita no caso binário aplicando a função $f(x) = 1 - (x)$. A Equação \ref{eq:logicalComplement2} representa a combinação lógica de equações resultante dessas operações.
+
+	\begin{equation}
+	x_4 = 1 - (1 - x_1) \vee  
+	x_0 = 1 - 0
+	\label{eq:logicalComplement2}
+	\end{equation}
+
+	A Equação \ref{eq:logicalComplement2} é então passada como argumento para a função Solve, que retorna o conjunto solução $S$ tal que $S = \{\{x4 \to x_1\},\{x0\to 1\}\}$. Perceba que $S$ apresenta mais de um conjunto de substituições, então utilizaremos ambos para gerar realizar as substituições no template base, obtendo assim o seguinte conjunto de templates $\{(x_7,x_6,x_5,x_1,x_3,x_2,x_1,x0),(x_7,x_6,x_5,x4,x_3,x_2,x_1,1)\}$. A união desses dois templates representa todas as regras não representadas pelo template $T_1$.
+
+	%TODO: verificar essa confusão!!
+	No exemplo dado com o template $T_1$ apenas a primeira etapa da operação de complemento é necessária, mas nem sempre é assim. Alguns templates apresentam \textit{templates de exceção}. Os templates que no processo de expansão apresentam alguma substituição inválida são os templates que possuem \textit{templates de exceção}. Na segunda etapa da operação de complemento se verifica se o template possui combinações de substituições que o levem a gerar regras inválidas. Caso exista, gera-se os templates de exceção do template passado como argumento e adiciona-o ao conjunto de templates complementares.
+
+	Exemplificando, considere o template $T_2 = (x_7, x_6, x_5, 1 - x_1 - x_2, x_3, x_2, x_1, 0)$ para $k=2$. A primeira etapa da operação de complemento ocorre normalmente e encontra os templates complementares $\{(x_7, x_6, x_5, x_4, x_3, x_2, x_1, 1),(x_7, x_6, x_5, x_1 + x_2, x_3, x_2, x_1, x_0)\}$. Todavia é trivial perceber que qualquer expansão do template $T_2$ que tenha o conjunto de substituições $\{x_1 = 1, x_2 = 1\}$ fará com que a quinta posição do template apresente o valor $2$ que não pertence ao intervalo $[0,k-1]$. Logo, todos os templates que apresentem $\{x_1 = 1, x_2 = 1\}$ são complementares ao template $T_2$. O processo de gerar o template de exceção consiste partindo de templates base aplicar cada um dos conjuntos de substituições que levam à regras inválidas. No caso de $T_2$, será obtido o template de exceção $T_{excecao 1} = (x_7, x_6, x_5, x_4, x_3, 1, 1, x_0)$. A operação de complemento então adiciona na lista de templates complementares os templates de exceção, finalizando assim o processo e obtendo o seguinte conjunto de templates complementares:
+	\begin{equation}
+	\{(x_7, x_6, x_5, x_4, x_3, x_2, x_1, 1),(x_7, x_6, x_5, x_1 + x_2, x_3, x_2, x_1, x_0),(x_7, x_6, x_5, x_4, x_3, 1, 1, x_0)\}
+	\label{eq:complementionSet}
+	\end{equation}
+
+	É importante dizer que que a implementação do algoritmo que executa a operação de complemento ainda não permite trabalhar com $k\neq 2$. Outra questão relevante que deve ser devidamente enfatizada é que apesar de nos exemplos com $T_1$ e $T_2$ não se ter apresentado mais de um templates de exceção, isso é possível e comum.
+
+	O desenvolvimento da operação de complemento de template permite diversas possibilidades. Uma delas
+
+	 . Conforme dito anteriormente, ainda não se sabe se existem regras de raio 3 que solucionem o problema de paridade. Mas os templates podem ser uma forma interessante de restringir o conjunto de regras na busca dessa solução.
+
+	As regras dos ACs que solucionam o problema de paridade tem algumas propriedades estáticas que podem ser trivialmente percebidas. Um AC que resolva o problema de paridade sempre será contido, tendo em vista no problema de paridade as vizinhanças homogêneas não devem levar à transições de estado ativas, e está é a única restrição de variável dos templates contidos para AC binários. Vale frisar que o espaço das regras contidas de raio 3 ainda é um espaço muito grande, entretanto essa não é a única propriedade estática que um AC que resolva o problema de paridade deve conter.
+
+	Para que um AC resolva problema de paridade também é necessário que ele não seja conservativo, visto que se a soma dos estados do AC não mudar, ele nunca convergirá como propõem o problema. Por fim, é espera-se que um AC que resolva o problema de paridade seja conservativo de paridade, afinal o caso o AC troque de paridade ele tenderá a convergir para a solução errada.
+
+	Como conseguimos obter os templates para todas essa propriedades, é possível utilizar as operações de complemento e intersecção para restringir o espaço de busca para a solução desse problema. Basta que se passe como argumento os templates das propriedades estáticas que espera-se que o AC tenha para a operação de intersecção, ou seja, efetua-se a intersecção dos templates de confinamento e conservabilidade de paridade. E, posteriormente, efetue-se a intersecção do template obtido com cada um dos templates resultantes da operação de complemento do template das regras não consideradas uteis para a resolução do problema, ou seja, o complemento dos templates das regras conservativas de estado.
+
+	Formalmente essas operações de conjuntos entre os templates pode ser representado através da Equação \ref{eq:operationsTemplateParidade}, sendo que $T_{confinado}$ representa o templates das regras confinadas, $T_{conservaparidade}$ representa o templates das regras que conservam a paridade, $\bar{T}_{conservaestados}$ representa o conjunto de templates complementares ao templates das regras conservativas e $T_{paridade}$ representa um conjunto templates que restringem um pouco mais as regras com possibilidades de solucionar o problema de paridade.
+
+	\begin{equation}
+	T_{paridade} = (T_{conservaparidade} \cap T_{confinado}) \cap \bar{T}_{conservaestados}
+	\label{eq:operationsTemplateParidade}
+	\end{equation}
+
+\section{CONSIDERAÇÕES FINAIS}\label{sec:conclusao}%FALAR SE O QUE JÁ ACHEI É UTIL, BOM, PODE SER MELHORADO...
+No presente trabalho é descrito os templates de autômatos celulares, proposta introduzida por \citeonline{deOliveira2014}, que por meio de uma generalização de tabelas de transição $k$-árias pode representar conjuntos de ACs.
+
+O conceito de templates é importante devido sua capacidade de representar conjuntos de ACs com determinada propriedade dinâmica. Essa propriedade faz com que não seja necessário buscar por todo um espaço de ACs, que devido ao rápido crescimento das famílias dos ACs conforme se mudam seu parâmetros, impossibilitaria a busca através de força bruta.
+
+Por conta dessa dessas capacidade de representação de ACs com determinada propriedades, foi exposto aqui também algumas propriedades estáticas e os algoritmos geradores dos templates que as representam. Esses algoritmos esses já estavam implementados na biblioteca \textit{open source} \textit{CATemplates} \citeonline{CATemplates}. Além disso foi explicada algumas operações do \textit{CATemplates} que podem ser aplicadas aos templates: a expansão e a intersecção. Essas operações, desenvolvidas por \citeonline{daCosta2014}, foram mostradas novamente aqui para que fosse possível explicitar sua importância e relevância para a solução de problemas típicas do ACs, como o problema de paridade.
+
+Também foi introduzido nesse trabalho a operação de complemento de templates. Essa operação permite que dado um templates, se encontre um conjunto de templates que represente todas as regras que não pertençam ao template passado como argumento. Essa operação ainda só aceita templates binários, e um possível trabalho futuro é a implementação desse algoritmo generalizado para qualquer valor de $k$. A operação de complemento, já disponível na biblioteca \textit{CATemplates}, é outro exemplo de operação que pode ser utilizada para restringir o conjunto de regras a serem avaliadas na busca pela solução do problema de paridade, por exemplo.
+
+Para que fosse possível a implementação da operação de complemento, foi introduzido aqui a operação que, dado um template, gera \textit{templates de exceção}. \textit{Templates de exceção} são gerados apartir de templates bases substituindo-se algumas variáveis pelas substituições que geram regras inválidas no template original. Os algoritmo que geram templates de exceção são essenciais para a operação de complemento.
+
+Também foi introduzido nesse trabalho um conjunto de processos utilizando templates que podem auxiliar na restrição do espaço de busca para a solução do problema de paridade.
+
+Ainda pretende-se implementar novos algoritmos geradores de templates que represente outras propriedades estáticas, tais como a propriedade \textit{left permutive}, assim como busca-se a implementação de novas operações de templates baseadas na operações de conjuntos, como a operação de união.
+
+\section{PLANO DE TRABALHO}
+
+Este projeto está organizado em 7 fases, em um período de dois anos, conforme descrito na tabela \ref{cronograma}:
+
+  \begin{itemize}
+      \item Fase 0: participação nas disciplinas necessárias ao cumprimento dos créditos para a obtenção do título de mestre;
+      \item Fase 1: pesquisa bibliográfica de autômatos celulares e de templates;
+      \item Fase 2: programação e testes da operação de complemento de templates e de operações de geração de templates de exceção;
+      \item Fase 3: proposição de propriedades estáticas para se gerar templates;
+      \item Fase 4: programação e testes da de operações de geração de templates;
+      \item Fase 5: submissão de artigo;
+      \item Fase 6: escrita da dissertação.
+  \end{itemize}
+
+\begin{table}[h!]
+\centering
+\caption{Cronograma de desenvolvimento do projeto}
+\label{cronograma}
+\resizebox{\textwidth}{!}{%
+	\vspace{0cm}
+	\begin{tabular}{|l|c|c|c|c|c|c|c|c|}
+	\hline	
+	\multicolumn{1}{|c|}{} 	& \multicolumn{4}{c|}{2014} 					& \multicolumn{4}{c|}{2015}						\\ \hline
+	\textbf{Atividades} 	& Jan-Mar	& Abr-Jun 	& Jul-Set 	& Out-Dez	& Jan-Mar	& Abr-Jun 	& Jul-Set 	& Out-Dez	\\ \hline
+	Fase 0 					&  •		& •			& •			& •			&   		& •			&  			&  			\\ \hline
+	Fase 1				 	&   		&  			&  			& •			&  •		& 			&  			&  			\\ \hline
+	Fase 2				 	&   		&  			&  			& 			&  •		& •			&  			&  			\\ \hline
+	Fase 3				 	&   		&  			&  			&  			&   		&  			& •			& 			\\ \hline
+	Fase 4				 	&   		&  			&  			&  			&   		&  			& •			& •			\\ \hline
+	Fase 5				 	&   		&  			&  			&  			&   		&  			& •			&  			\\ \hline
+	Fase 6				 	&   		&  			&  			&  			&   		& •			& •			& •			\\ \hline
+	\hline
+	\end{tabular}
+}
+\end{table}
