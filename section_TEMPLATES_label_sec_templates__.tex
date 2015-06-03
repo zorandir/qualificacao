@@ -224,19 +224,15 @@ Ao utilizar os grafos de \textit{De Bruijn} fixando algumas transições de esta
 	De acordo com \cite{boccara2002}, para um AC ser conservativo cada uma de suas regras locais $f$ de vizinhança $(\alpha_0,\alpha_1, \dots, \alpha_{n-1})$ deve respeitar as condições descritas na Equação \ref{eq:conservativeCA}.
 
 	\begin{equation}
-	\begin{split}
 	f(\alpha_0,\alpha_1, \dots,\alpha_{n-1}) = \alpha_0 + (\sum_{i=0}^{n-2}f(0_0,0_1, \dots,0_i,\alpha_1,\alpha_2, \dots,\alpha_{n-1}) \\- f(0_0,0_1, \dots,0_i,\alpha_0,\alpha_1, \dots,\alpha_{n-i-1}))
 	\label{eq:conservativeCA}
-	\end{split}
 	\end{equation}
 
 	Para exemplificar, considere a regra 204 do espaço elementar. Por meio da condição mostrada na Equação \ref{eq:conservativeCA}, será provado que essa regra é conservativa, já que satisfaz a condição. A Equação \ref{eq:ruleTable204} representa a tabela de transição da regra 204.
 
 	\begin{equation}
-	\begin{split}
 	(((1,1,1),1),((1,1,0),1),((1,0,1),0),((1,0,0),0),\\((0,1,1),1),((0,1,0),1),((0,0,1),0),((0,0,0),0))
 	\label{eq:ruleTable204}
-	\end{split}
 	\end{equation}
 
 	Como demonstra \cite{daCosta2014}, a aplicação das condições descritas na Equação \ref{eq:conservativeCA} nas tabelas de transições de ACs do espaço elementar, sempre resultará no sistema descrito pela Equação \ref{eq:conservativeLinearSystem}, sendo que essa Equação simplificada pode ser representada pela Equação \ref{eq:conservativeLinearSystem2}.
@@ -307,10 +303,8 @@ Ao utilizar os grafos de \textit{De Bruijn} fixando algumas transições de esta
 	O processo de gerar regras conservativas de paridade é bem parecido, porém as condições de \citeonline{boccara2002} são ligeiramente modificadas em relação a Equação \ref{eq:conservativeCA}, de forma que cada uma das funções locais deve respeitar agora as condições da Equação \ref{eq:parityConservativeCA}.
 
 	\begin{equation}
-	\begin{split}
 	f(\alpha_0,\alpha_1, \dots,\alpha_{n-1}) \equiv \alpha_0 + (\sum_{i=0}^{n-2}f(0_0,0_1, \dots,0_i,\alpha_1,\alpha_2, \dots,\alpha_{n-1}) \\- f(0_0,0_1, \dots,0_i,\alpha_0,\alpha_1, \dots,\alpha_{n-i-1})) \; (mod 2)  
 	\label{eq:parityConservativeCA}
-	\end{split}
 	\end{equation}
 
 	A biblioteca \textit{CATemplates} já tem implementado o algoritmo gerador de templates de regras conservativas de paridade, e conforme será mostrado posteriormente, esse algoritmo pode ser de suma importância na busca de uma solução do para o problema de paridade.
@@ -346,12 +340,10 @@ Ao utilizar os grafos de \textit{De Bruijn} fixando algumas transições de esta
 	Já a Equação \ref{eq:captiveTemplateK3} representa a família dos autômatos celulares confinados de $r=1$ e três estados.
 
 	\begin{equation}
-	\begin{split}
 	(2, x_{25} \in \{1,2\}, x_{24} \in \{0,2\}, x_{23} \in \{1,2\}, x_{22} \in \{1,2\}, x_{21}, x_{20} \in \{0,2\}, x_{19}, x_{18} \in \{0,2\}, \\
 	x_{17} \in \{1,2\}, x_{16} \in \{1,2\}, x_{15}, x_{14} \in \{1,2\},1, x_{12} \in \{0,1\}, x_{11}, x_{10} \in \{0,1\}, x_9 \in \{0,1\}, \\
 	x_8 \in \{0,2\}, x_7, x_6 \in \{0,2\}, x_5, x_4 \in \{0,1\}, x_3 \in \{0,1\}, x_2 \in \{0,2\}, x_1 \in \{0,1\}, 0)
 	\label{eq:captiveTemplateK3}
-	\end{split}
 	\end{equation}
 
 
