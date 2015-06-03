@@ -46,11 +46,9 @@ Definindo qual será o raio, o número de estados, o tipo de vizinhança e a dim
 
 Todo AC é regido por um conjunto de regras locais que determinam como ficarão as configurações no próximo passo de tempo de acordo com as configurações de vizinhança recebidas. Existem diversas maneiras de representar essas regras locais, a mais comum são as tabelas de transições. Tabela de transição é uma $n-$upla em que os elementos são todos os possíveis estados de vizinhanças de uma célula acrescentados de um estado que representa a transição que ocorrerá. A Equação \ref{eq:nupla} representa a $n$-upla da regra 30.
 \begin{equation}
-\begin{split}
 (((1,1,1),0),((1,1,0),0),((1,0,1),0),((1,0,0),1),\\
 ((0,1,1),1),((0,1,0),1),((0,0,1),1),((0,0,0),0))
 \label{eq:nupla}
-\end{split}
 \end{equation}
 
 Uma outra forma de representar uma tabela de transições é a forma icônica. Na forma icônica os bits $1$ são representados por ícones na cor preta, e os bits $0$ por ícones na cor branca. Cada uma das transições de estados é representada por um conjunto de ícones representando a vizinhança na parte de cima, e um ícone representando o estado resultante após a transição abaixo. A Figura \ref{fig:repIconicaR30} mostra a representação icônica da regra 30.
@@ -80,15 +78,7 @@ No espaço elementar há $2^{2^{3}} = 256$ regras, aumentando apenas para 2 o va
 Para contornar esse problema, é muito comum utilizar algumas propriedades estáticas para restringir as regras do espaço em que se fará as buscas pelo regra com o comportamento desejado. Alguns exemplos de propriedades estáticas que podem auxiliar nesse ``filtro'' são o confinamento, conservabilidade de estados e conservabilidade de paridade. Todas as propriedades estáticas citadas anteriormente são detalhadas na Seção \ref{sec:propriedadesEstaticas}.
 
 O problema da paridade é um dos problemas que envolvem fazer a ligação entre comportamento local e comportamento global. Nesse projeto, considerando que um AC binário, unidimensional e com condição de contorno periódica, se uma configuração inicial contiver um número ímpar de estados com valor 1, o AC deve convergir para que todas as células estejam preenchidas com 1. Caso contrário, ele deve convergir para todos os estados com o valor 0. Por conta da própria definição do problema, fica simples perceber que essa condições não podem ser satisfeitas em uma grelha de tamanho par, afinal uma configuração de com todos os estados apresentando o mesmo valor não poderia ser um estado quiescente. Devido essa questão, pode-se dizer que as regras que solucionam o problema de paridade em ACs são \textit{perfeitas} se eles resolverem o problema de paridade em qualquer configuração inicial arbitrária para ACs de tamanho ímpar. 
-% A Figura \ref{fig:paritySample} ilustra uma regra que soluciona o PP.
-% \begin{figure}[h!]
-% 	\center
-% 	\subfigure[CI com número ímpar de 1s]{\includegraphics[width=5cm]{regra-1-par.png}}
-% 	\qquad
-% 	\subfigure[CI com número par de 1s]{\includegraphics[width=5cm]{regra-1-impar.png}}
-% 	\caption{Exemplo de regra de paridade. A imagem a esquerda contém em sua entrada um número par de 1s. A da direita contém um número ímpar.}
-% 	\label{fig:paritySample}
-% \end{figure}
+
 
 Ainda em relação ao problema de paridade, \citeonline{Betel2013} descrevem 2 propriedades básicas: se $f$ é a regra local que resolve o problema de paridade, então $f(0, \dots, 0) = 0$ e $f(1, \dots, 1) = 1$. A segunda propriedade define que para uma regra preservar a configuração de paridade, a regra deve conter um número par de transições ativas. Em outras palavras, toda aplicação da regra deve levar a uma nova configuração com a mesma paridade.
 
