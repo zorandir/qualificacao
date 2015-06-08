@@ -1,8 +1,3 @@
-section_INTRODU_O_label_sec__.tex
-figures/fig_circularTorus/fig_circularTorus.gif
-figures/ace-regra-30/ace-regra-30.png
-Aut_matos_celulares_s_o__.tex
-figures/fig_complement/fig_complement.png
-section_INTRODU_O_label_sec__1.tex
 section_AUT_MATOS_CELULARES_label__.tex
+section_INTRODU_O_label_sec__.tex
 section_TEMPLATES_label_sec_templates__.tex
