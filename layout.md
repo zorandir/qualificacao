@@ -1,3 +1,4 @@
 section_INTRODU_O_label_sec__.tex
 section_AUT_MATOS_CELULARES_label__.tex
+figures/fig_circularTorus1/fig_circularTorus1.gif
 section_TEMPLATES_label_sec_templates__.tex
