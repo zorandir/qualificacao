@@ -1,4 +1,5 @@
 section_INTRODU_O_label_sec__.tex
+Aut_matos_celulares_s_o__.tex
 section_INTRODU_O_label_sec__1.tex
 section_AUT_MATOS_CELULARES_label__.tex
 section_TEMPLATES_label_sec_templates__.tex
